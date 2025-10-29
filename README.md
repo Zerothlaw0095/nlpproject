@@ -1,51 +1,28 @@
-# NLPProject Backend
+# PDF Summarizer (Minimal)
 
-This backend accepts PDF uploads, extracts the text, summarizes the document (via OpenAI if configured, or using a fallback), stores the PDF file on disk and metadata in a small SQLite database, and provides endpoints to list and fetch documents and summaries.
+This is a minimal TypeScript + React scaffold for a PDF Summarizer web app.
 
-Features:
-- Upload PDF files (POST /api/documents)
-- Extract text (pdf-parse)
-- Summarize via OpenAI API (if OPENAI_API_KEY is set) or fallback extractive summary
-- Store PDF in `uploads/` and metadata in `data/db.sqlite`
-- Endpoints to list documents, get details, download file, and get summary
+Features
+- Centered, minimal UI with a file upload (drag & drop or click)
+- "Summarize" button that POSTs the uploaded PDF to `/api/summarize`
+- Displays the returned summary text
 
-Requirements
-- Node 18+ recommended
-- (Optional) OpenAI API key for better summaries
+How to run (Windows, cmd.exe)
 
-Quick start
-1. Copy files into your repository.
-2. Install dependencies:
-   npm install
+1. Install dependencies:
 
-3. Create a `.env` file from `.env.example` and set:
-   - PORT (optional)
-   - OPENAI_API_KEY (optional)
+```
+npm install
+```
 
-4. Run DB migration to create the table:
-   npm run migrate
+2. Start dev server:
 
-5. Start the development server:
-   npm run dev
+```
+npm run dev
+```
 
-API Endpoints
-- POST /api/documents
-  - Form field: `file` (multipart/form-data)
-  - Returns: saved document metadata (id, originalName, uploadAt, summary, ...)
+The app expects a backend endpoint at `/api/summarize` that accepts a multipart/form-data POST containing the file under the `file` field and returns either JSON `{ "summary": "..." }` or plain text.
 
-- GET /api/documents
-  - Returns list of documents
-
-- GET /api/documents/:id
-  - Returns document metadata
-
-- GET /api/documents/:id/download
-  - Downloads the PDF file
-
-- GET /api/documents/:id/summary
-  - Returns only the summary for the document
-
-Notes & Next steps
-- For production, add authentication, HTTPS, and cloud storage (S3) for uploaded PDFs.
-- Use a job queue (e.g., Bull, RabbitMQ) to perform extraction + summarization asynchronously for large files.
-- Break large documents into chunks, summarize each, then combine summaries to avoid token limits.
+Notes
+- The UI is intentionally neutral and minimal to make backend integration straightforward.
+- No animations or decorative icons are included.
